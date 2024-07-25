@@ -12,4 +12,6 @@ This project shows how to extract a list of colors from a jpg file, convert it i
 
 If you are working on cmd, you can install the library in the following manner
 
-```pip install colorgram.py```
+```
+pip install colorgram.py
+```
