@@ -1,20 +1,44 @@
-from turtle import Turtle, Screen
+import colorgram
 import random
+from turtle import Turtle, Screen
 
-screen = Screen()                                       #Creating a screen object
+#Setting up the screen and setting the colormode to RGB
+screen = Screen()
+screen.colormode(255)
 
-turtle = Turtle()                                       #Creating a turtle object
-turtle.hideturtle()                                     #Hide the turtle
-turtle.speed("fastest")                                 #Turtle's speed should be fastest
+#Setting up the Turtle object, hiding it and using penup so that it does not leave trace lines
+turtle = Turtle()
+turtle.hideturtle()
+turtle.penup()
 
-colors = ["red", "blue", "green", "orange", "purple", "black", "yellow", "pink", "teal", "plum"]
+#Declaring initial co-ordinated for turtle so turtle would start from there and setting its speed to fastest
+pos_x = -295
+pos_y = -250
+turtle.teleport(pos_x, pos_y)
+turtle.speed("fastest")
 
-for i in range(100):                                    #Starting a for loop
-    turtle.circle(100)                                  #Turtle will make a circle of radius 100
-    turtle.color(random.choice(colors))                 #The circle will be of a random color from  the colors list declared above
-    current_heading = turtle.heading()                  #Current heading variable will store turtle's heading as of now
-    new_heading = current_heading + 10                  #Add 10 to that heading
-    turtle.setheading(new_heading)                      #Set turtle's new heading to that heading
-    turtle.circle(100)                                  #Turtle will draw a new circle at that heading
+#Using colorgram library to extract colors from image.jpg
+colors = colorgram.extract("image.jpg", 84)
+color_list = []
 
-screen.exitonclick()                                    #Screen will exit when user presses "X"
+#Converting the extracted colors to (R,G,B) form and appending that to color_list
+for i in colors:
+    r = i.rgb.r
+    g = i.rgb.g
+    b = i.rgb.b
+    new_color = (r, g, b)
+    color_list.append(new_color)
+
+for i in range(1, 101):                                     #Running for loop till 100
+    color = random.choice(color_list)                       #Choosing a random color from our list
+    turtle.dot(20, color)                                   #Turtle will draw a dot of size 20 using the extracted color
+    turtle.fd(60)                                           #Turtle will move forward 60 paces to draw the next dot
+
+    if i % 10 == 0:                                         #Once 10 dots are drawn
+        turtle.setheading(90)                               #Turtle will change its heading to north
+        turtle.fd(60)                                       #Turtle will go forward 60 paces
+        pos_y += 60                                         #Position y will be incremented by 60
+        turtle.teleport(pos_x, pos_y)                       #Turtle will teleport to its new coordinates
+        turtle.setheading(0)                                #Turtle will set its heading towards right and start the for loop again
+
+screen.exitonclick()                                        #Screen can exit only when the user presses "X"
